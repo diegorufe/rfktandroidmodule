@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">rfktandroidmodulelib</string>
+    <string name="toolbar_defecto">ToolbarDefecto</string>
 </resources>
