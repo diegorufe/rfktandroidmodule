@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RFBaseButton">
+        <attr name="defaultBackColor" format="reference|color" />
+        <attr name="defaultPadding" format="dimension" />
+        <attr name="defaultFontSize" format="dimension" />
+        <attr name="defaultTextColor" format="reference|color" />
+        <attr name="defaultBack" format="reference|color" />
+    </declare-styleable>
+</resources>
