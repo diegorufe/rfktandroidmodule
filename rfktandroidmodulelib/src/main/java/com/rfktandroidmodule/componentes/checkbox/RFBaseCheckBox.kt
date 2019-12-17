@@ -1,4 +1,4 @@
-package com.rfktandroidmodule.componentes.buttons
+package com.rfktandroidmodule.componentes.checkbox
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.util.AttributeSet
-import android.widget.Button
+import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import com.rf.rfktandroidmodulelib.R
@@ -15,33 +15,27 @@ import com.rfktandroidmodule.constants.IRFKTComponentsConstants
 import kotlin.math.absoluteValue
 
 /**
- * Clase base para botones de android
+ * Clase base para checkbox
  */
-open class RFBaseButton @JvmOverloads constructor(
+open class RFBaseCheckBox @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : Button(context, attrs) {
+) : CheckBox(context, attrs) {
+
+    var defaultBackColor: Int? = null;
+
+    var defaultFontSize: Int? = IRFKTComponentsConstants.FONT_SIZE_DEFECTO_CHECKBOX;
 
 
-    var defaultBackColor: Int? = IRFKTComponentsConstants.BACK_COLOR_DEFECTO_BUTTONS;
+    var defaultTextColor: Int? = IRFKTComponentsConstants.FONT_COLOR_DEFECTO_CHECKBOX;
 
 
-    var defaultPadding: Int? = IRFKTComponentsConstants.PADDING_DEFECTO_BUTTONS;
-
-
-    var defaultFontSize: Int? = IRFKTComponentsConstants.FONT_SIZE_DEFECTO_BUTTONS;
-
-
-    var defaultTextColor: Int? = IRFKTComponentsConstants.FONT_COLOR_DEFECTO_BUTTONS;
-
-
-    var defaultBackDrawable: Int? = IRFKTComponentsConstants.BACKGROUND_DRAWABLE_DEFECTO_BUTTONS;
+    var defaultBackDrawable: Int? = null;
 
     /**
      * Load data
      */
     open fun load() {
-        this.changePadding(this.defaultPadding);
         this.changeFontSize(this.defaultFontSize);
         this.changeTextColor(this.defaultTextColor);
         this.changeDrawable(this.defaultBackDrawable);
@@ -65,16 +59,6 @@ open class RFBaseButton @JvmOverloads constructor(
         this.defaultFontSize = fontSize;
         if (this.defaultFontSize != null) {
             this.setTextSize(this.defaultFontSize!!.toFloat());
-        }
-    }
-
-    /**
-     * Método para cambiar el padding
-     */
-    open fun changePadding(padding: Int?) {
-        this.defaultPadding = padding;
-        if (this.defaultPadding != null) {
-            this.setPadding(this.defaultPadding!!);
         }
     }
 
@@ -123,26 +107,20 @@ open class RFBaseButton @JvmOverloads constructor(
      */
     private fun initStyleSheetAtributtes(attrs: AttributeSet?) {
         val typedArray: TypedArray =
-            this.context.theme.obtainStyledAttributes(attrs, R.styleable.RFBaseButton, 0, 0);
+            this.context.theme.obtainStyledAttributes(attrs, R.styleable.RFBaseCheckBox, 0, 0);
 
         for (i in 0 until typedArray.indexCount) {
             when (typedArray.getIndex(i)) {
-                R.styleable.RFBaseButton_button_defaultBackColor -> this.defaultBackColor =
+                R.styleable.RFBaseCheckBox_checkbox_defaultBackColor -> this.defaultBackColor =
                     this.defaultBackColor?.let { typedArray.getInt(typedArray.getIndex(i), it) }
 
-                R.styleable.RFBaseButton_button_defaultBack -> this.defaultBackDrawable =
+                R.styleable.RFBaseCheckBox_checkbox_defaultBack -> this.defaultBackDrawable =
                     this.defaultBackDrawable?.let { typedArray.getInt(typedArray.getIndex(i), it) }
 
-                R.styleable.RFBaseButton_button_defaultFontSize -> this.defaultFontSize =
+                R.styleable.RFBaseCheckBox_checkbox_defaultFontSize -> this.defaultFontSize =
                     this.defaultFontSize?.let { typedArray.getInt(typedArray.getIndex(i), it) }
 
-                R.styleable.RFBaseButton_button_defaultPadding -> this.defaultPadding =
-                    this.defaultPadding?.let {
-                        typedArray.getDimension(typedArray.getIndex(i), it.toFloat())
-                            .absoluteValue.toInt()
-                    }
-
-                R.styleable.RFBaseButton_button_defaultTextColor -> this.defaultTextColor =
+                R.styleable.RFBaseCheckBox_checkbox_defaultTextColor -> this.defaultTextColor =
                     this.defaultTextColor?.let { typedArray.getInt(typedArray.getIndex(i), it) }
             }
         }
@@ -154,6 +132,5 @@ open class RFBaseButton @JvmOverloads constructor(
         this.initStyleSheetAtributtes(attrs);
         this.load()
     }
-
 
 }

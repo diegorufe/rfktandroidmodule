@@ -3,9 +3,11 @@ package com.rfktandroidmodule.activities.splashScreeen
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.widget.LinearLayout
 import com.rf.rfktandroidmodulelib.R
 import com.rfktandroidmodule.activities.base.BaseActivity
 import com.rfktandroidmodule.constants.IRFKTConstants
+import com.rfktandroidmodule.utils.UtilsAndroid
 import com.rfktandroidmodule.utils.UtilsClass
 import com.rfktandroidmodule.utils.UtilsLog
 import java.util.*
@@ -15,7 +17,16 @@ import kotlin.reflect.KClass
  * Clase para mostrar la página principal por defecto.
  * En esta clase podremos definir acciones necesaiaras que se ejecutaran a la hora de lanzar la aplicación
  */
-open abstract class SplashScreenDefectoActivity : BaseActivity() {
+abstract class SplashScreenDefectoActivity : BaseActivity() {
+
+    var linear_layout_spalsh_screen_defecto: LinearLayout? = null;
+
+    /**
+     * Método para obtener el id del contedor princiapl del splash screen
+     */
+    open fun getIdLinearLayoutSplashScreen(): Int {
+        return R.id.linear_layout_spalsh_screen_defecto
+    }
 
     /**
      * Método para obtener la actividad principal de la aplicación a lanzar despues del splass screen
@@ -29,6 +40,13 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
     }
 
     /**
+     * Método para obtener el color de fondo del splash screen
+     */
+    open fun getBackgroundColor(): Int? {
+        return null;
+    }
+
+    /**
      * Método para cargar los datos de la aplicación al cargar la aplicación
      */
     open fun cargaDatosApp() {
@@ -36,17 +54,36 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
     }
 
     /**
+     * Por defecto el toolbar del splash screem no se muestra
+     */
+    override fun isCargarToolBar(): Boolean {
+        return false
+    }
+
+    /**
      * Método para lanzar la activity principal
      */
     fun lanzaActivityPrincipal() {
+        val intent: Intent = Intent(
+            this,
+            UtilsClass.classIntent(this.getActivityPrincipal()!!)
+        );
+
+        // Cargamos datos extras a la actividad
+        this.cargaDatosExtraActivityPrincipal(intent);
+
         this.startActivity(
-            Intent(
-                this,
-                UtilsClass.classIntent(this.getActivityPrincipal()!!)
-            )
+            intent
         );
         // Finalizamos el splasscreen
         this.finish();
+    }
+
+    /**
+     * Método para cargar datos extra a la actividad principal
+     */
+    open fun cargaDatosExtraActivityPrincipal(intent: Intent) {
+
     }
 
     /**
@@ -56,8 +93,31 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
         return IRFKTConstants.TIEMPO_MINIMO_ESPERA_SPLASHSCREEM_MILISEGUNDOS;
     }
 
+    /**
+     * Método para cargar datos del layout
+     */
+    open fun cargaDatosLayout() {
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
+        this.linear_layout_spalsh_screen_defecto =
+            this.findViewById(this.getIdLinearLayoutSplashScreen())
+
+        // Fijamos el color de fondo
+        if (this.getBackgroundColor() != null && this.linear_layout_spalsh_screen_defecto != null) {
+            this.linear_layout_spalsh_screen_defecto!!.setBackgroundColor(
+                UtilsAndroid.getColor(
+                    this.applicationContext,
+                    this.getBackgroundColor()!!
+                )
+            )
+        }
+
+        // Cargamos datos de layout
+        this.cargaDatosLayout()
+
         // Ejecutamos hilo splashscreen
         CargaSplashScreesDefectoTask().execute();
     }
@@ -73,7 +133,7 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
 
             if (UtilsLog.hasDebug()) {
                 UtilsLog.debug(
-                    this@SplashScreenDefectoActivity.getTag(),
+                    this@SplashScreenDefectoActivity.getLogTag(),
                     "Ejecutando splashscreen ..."
                 );
             }
@@ -97,7 +157,7 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
 
             if (UtilsLog.hasDebug()) {
                 UtilsLog.debug(
-                    this@SplashScreenDefectoActivity.getTag(),
+                    this@SplashScreenDefectoActivity.getLogTag(),
                     "Iniciando splashscreen ..."
                 );
             }
@@ -109,14 +169,14 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
 
             if (UtilsLog.hasDebug()) {
                 UtilsLog.debug(
-                    this@SplashScreenDefectoActivity.getTag(),
+                    this@SplashScreenDefectoActivity.getLogTag(),
                     "Finalizando splashscreen ..."
                 );
             }
 
             if (UtilsLog.hasDebug()) {
                 UtilsLog.debug(
-                    this@SplashScreenDefectoActivity.getTag(),
+                    this@SplashScreenDefectoActivity.getLogTag(),
                     "Lanzando actividad principal ..."
                 );
             }
@@ -127,7 +187,7 @@ open abstract class SplashScreenDefectoActivity : BaseActivity() {
             } else {
                 if (UtilsLog.hasError()) {
                     UtilsLog.error(
-                        this@SplashScreenDefectoActivity.getTag(),
+                        this@SplashScreenDefectoActivity.getLogTag(),
                         "La actividad principal es null"
                     );
                 }

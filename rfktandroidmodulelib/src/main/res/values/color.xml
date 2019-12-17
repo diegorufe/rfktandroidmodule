@@ -8,4 +8,7 @@
     <color name="colorDorado">#EEFFC107</color>
     <color name="colorLightGreen">#6DC066</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRight">#0A8A0E</color>
+    <color name="colorWrong">#E01908</color>
+    <color name="colorTotal">#AA8303</color>
 </resources>
